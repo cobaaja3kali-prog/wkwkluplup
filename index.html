@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untuk Kamu ❤️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="desktop-warning">
+    <div class="desktop-warning-card">
+      <div class="warning-heart">📱</div>
+      <h2>Buka di HP ❤️</h2>
+      <p>Website ini dibuat khusus untuk tampilan mobile.</p>
+    </div>
+  </div>
+
+  <div id="hearts"></div>
+  <div id="flowers"></div>
+
+  <main class="container">
+    <!-- BAGIAN 1: SAMBUTAN -->
+    <section class="page active" id="welcome">
+      <div class="card">
+        <div class="heart-icon">♥</div>
+        <p class="eyebrow">Untuk seseorang yang spesial...</p>
+        <h1 id="welcomeTitle"></h1>
+        <p class="typing" id="welcomeText"></p>
+        <button class="btn primary" onclick="nextPage('story')">Buka ❤️</button>
+      </div>
+    </section>
+
+    <!-- BAGIAN 2: CERITA / ALASAN -->
+    <section class="page" id="story">
+      <div class="card">
+        <p class="eyebrow">Sedikit cerita</p>
+        <h2 id="storyTitle"></h2>
+        <div class="story-text" id="storyText"></div>
+        <button class="btn primary" onclick="nextPage('question')">Lanjutkan ✨</button>
+      </div>
+    </section>
+
+    <!-- BAGIAN 3: PERTANYAAN -->
+    <section class="page" id="question">
+      <div class="card question-card">
+        <div class="big-heart">❤️</div>
+        <p class="eyebrow">Aku punya satu pertanyaan...</p>
+        <h2>Wanna be my girlfriend?</h2>
+        <p class="small-text">Pikir baik-baik ya... karena aku serius. 🥺</p>
+
+        <div class="buttons">
+          <button class="btn yes" onclick="sayYes()">YES ❤️</button>
+          <button class="btn no" id="noBtn">NO 😭</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAGIAN 4: PESAN AKHIR -->
+    <section class="page" id="final">
+      <div class="card">
+        <div class="big-heart">💗</div>
+        <p class="eyebrow">Akhirnya...</p>
+        <h2 id="finalTitle"></h2>
+        <p class="final-message" id="finalText"></p>
+        <button class="btn primary" onclick="openWhatsApp()">Kirim ke WhatsApp 💌</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- GANTI FILE MUSIK DENGAN FILE KAMU SENDIRI -->
+  <audio id="music" loop>
+    <source src="shape-of-my-heart.mp3" type="audio/mpeg">
+  </audio>
+
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()" aria-label="Musik">🎵</button>
+
+  <script>
+    // =====================================================
+    // PENGATURAN — UBAH BAGIAN INI SESUAI KEINGINAN KAMU
+    // =====================================================
+
+    const nomorWA = "628xxxxxxxxxx";
+
+    const data = {
+      nama: "Kamu",
+
+      sambutan: "Hai, Kamu... ❤️",
+
+      sambutanText:
+        "Ada sesuatu yang sudah lama ingin aku sampaikan. " +
+        "Mungkin website kecil ini adalah cara paling berani yang bisa aku lakukan.",
+
+      ceritaTitle: "Kenapa aku membuat ini?",
+
+      cerita:
+        "Aku nggak tahu sejak kapan semuanya terasa berbeda. " +
+        "Tapi semakin sering ngobrol, semakin sering ketemu, dan semakin banyak hal kecil " +
+        "yang kita lewati, aku mulai sadar kalau kamu punya tempat yang spesial di hati aku. " +
+        "Aku nggak ingin cuma menyimpannya sendiri. Jadi hari ini, aku ingin jujur sama kamu... ❤️",
+
+      pesanAkhirTitle: "Makasih sudah bilang YES! ❤️",
+
+      pesanAkhir:
+        "Mulai hari ini, semoga kita bisa membuat lebih banyak cerita, " +
+        "tertawa bersama, saling menemani, dan menjalani semuanya pelan-pelan. " +
+        "Aku senang banget akhirnya bisa bilang ini ke kamu. 💕"
+    };
+
+    // =====================================================
+    // SISTEM WEBSITE
+    // =====================================================
+
+    const music = document.getElementById("music");
+    const musicBtn = document.getElementById("musicBtn");
+    const noBtn = document.getElementById("noBtn");
+
+    let musicStarted = false;
+
+    function typeText(element, text, speed = 35) {
+      if (element._typeTimer) {
+        clearInterval(element._typeTimer);
+      }
+
+      element.textContent = "";
+      let i = 0;
+
+      element._typeTimer = setInterval(() => {
+        element.textContent += text.charAt(i);
+        i++;
+
+        if (i >= text.length) {
+          clearInterval(element._typeTimer);
+          element._typeTimer = null;
+        }
+      }, speed);
+    }
+
+    function loadText() {
+      document.getElementById("welcomeTitle").textContent = data.sambutan;
+      typeText(document.getElementById("welcomeText"), data.sambutanText);
+
+      document.getElementById("storyTitle").textContent = data.ceritaTitle;
+      document.getElementById("storyText").textContent = "";
+
+      document.getElementById("finalTitle").textContent = data.pesanAkhirTitle;
+      document.getElementById("finalText").textContent = data.pesanAkhir;
+    }
+
+    function nextPage(id) {
+      document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+      });
+
+      const target = document.getElementById(id);
+      target.classList.add("active");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      // Musik mulai otomatis setelah tombol "Buka ❤️" ditekan.
+      // Browser mengizinkan play karena dipicu langsung oleh interaksi pengguna.
+      if (!musicStarted) {
+        music.currentTime = 0;
+        music.play().then(() => {
+          musicStarted = true;
+          musicBtn.textContent = "🔊";
+        }).catch(() => {
+          musicBtn.textContent = "🎵";
+        });
+      }
+
+      if (id === "story") {
+        const storyText = document.getElementById("storyText");
+        setTimeout(() => {
+          typeText(storyText, data.cerita, 25);
+        }, 300);
+      }
+    }
+
+    function sayYes() {
+      createConfetti();
+      nextPage("final");
+    }
+
+    function openWhatsApp() {
+      const pesan = "MAUUUU";
+      const url = "https://wa.me/" + nomorWA + "?text=" + encodeURIComponent(pesan);
+
+      window.location.href = url;
+    }
+
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+        musicStarted = true;
+        musicBtn.textContent = "🔊";
+      } else {
+        music.pause();
+        musicBtn.textContent = "🎵";
+      }
+    }
+
+    // Tombol NO berpindah ketika disentuh/diklik.
+    function moveNoButton() {
+      const padding = 20;
+
+      const maxX = Math.max(
+        padding,
+        window.innerWidth - noBtn.offsetWidth - padding
+      );
+
+      const maxY = Math.max(
+        padding,
+        window.innerHeight - noBtn.offsetHeight - padding
+      );
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.classList.add("escaping");
+      noBtn.style.position = "fixed";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+      noBtn.style.zIndex = "100";
+    }
+
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("touchstart", function(e) {
+      e.preventDefault();
+      moveNoButton();
+    }, { passive: false });
+    noBtn.addEventListener("click", moveNoButton);
+
+    // Hati beterbangan
+    function createHeart() {
+      const heart = document.createElement("span");
+      heart.className = "floating-heart";
+      heart.textContent = Math.random() > 0.5 ? "♥" : "♡";
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+      heart.style.fontSize = (12 + Math.random() * 20) + "px";
+      heart.style.opacity = 0.3 + Math.random() * 0.7;
+
+      document.getElementById("hearts").appendChild(heart);
+
+      setTimeout(() => heart.remove(), 10000);
+    }
+
+    setInterval(createHeart, 650);
+
+    // Bunga dekorasi
+    function createFlower() {
+      const flower = document.createElement("span");
+      flower.className = "floating-flower";
+      flower.textContent = Math.random() > 0.5 ? "🌸" : "🌹";
+
+      flower.style.left = Math.random() * 100 + "vw";
+      flower.style.animationDuration = (8 + Math.random() * 5) + "s";
+      flower.style.fontSize = (16 + Math.random() * 14) + "px";
+
+      document.getElementById("flowers").appendChild(flower);
+
+      setTimeout(() => flower.remove(), 13000);
+    }
+
+    setInterval(createFlower, 1800);
+
+    // Confetti saat YES
+    function createConfetti() {
+      const symbols = ["❤️", "💕", "💗", "✨", "🌸", "💖"];
+
+      for (let i = 0; i < 45; i++) {
+        const item = document.createElement("span");
+        item.className = "confetti";
+        item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+        item.style.left = Math.random() * 100 + "vw";
+        item.style.animationDelay = Math.random() * 1.5 + "s";
+        item.style.fontSize = (14 + Math.random() * 18) + "px";
+
+        document.body.appendChild(item);
+
+        setTimeout(() => item.remove(), 4500);
+      }
+    }
+
+    loadText();
+  </script>
+</body>
+</html>
