@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#12091c">
+  <title>Untuk Kamu ❤️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-hearts" id="bgHearts"></div>
+  <div class="bg-flowers" id="bgFlowers"></div>
+
+  <audio id="music" loop preload="auto">
+    <source src="shape-of-my-heart.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- HALAMAN SAMBUTAN -->
+  <section id="welcomePage" class="page active">
+    <div class="card welcome-card">
+      <div class="heart">♥</div>
+      <p class="eyebrow">SEBUAH PESAN UNTUK KAMU</p>
+      <h1 id="welcomeTitle"></h1>
+      <p class="subtext">Ada sesuatu yang ingin kakak sampaikan?</p>
+      <button class="main-btn" onclick="startWebsite()">Mulai ❤️</button>
+    </div>
+  </section>
+
+  <!-- HALAMAN KATA-KATA -->
+  <section id="messagePage" class="page">
+    <div class="card message-card">
+      <div class="mini-heart">♥</div>
+      <p class="eyebrow">TULIS PESANMU</p>
+      <h2>JESICA AULIA AGUSTIFANI</h2>
+      <p class="subtext">kenapa kok kembali lagi kak?? kata temene adek kalo mau dipamerin harus dijwab duluuu.</p>
+
+      <textarea id="messageInput" maxlength="2000"
+        placeholder="ketik isi hati kakak kalo mau keluar..."></textarea>
+
+      <div class="counter"><span id="counter">0</span>/2000</div>
+
+      <button class="main-btn" onclick="sendWhatsApp()">Kirim 💌</button>
+      <button class="music-btn" onclick="toggleMusic()" id="musicBtn">🔊 Musik</button>
+    </div>
+  </section>
+
+  <script>
+    // =========================
+    // PENGATURAN - EDIT DI SINI
+    // =========================
+    const nomorWA = "6283191399212";
+
+    const sambutanText = "Haii kakakk...";
+
+    // =========================
+    // ANIMASI
+    // =========================
+    const bgHearts = document.getElementById("bgHearts");
+    const bgFlowers = document.getElementById("bgFlowers");
+
+    const heartSymbols = ["♥", "♡", "❤"];
+    const flowerSymbols = ["✿", "❀", "✽", "❁"];
+
+    function createFloatingElement(container, symbols, className) {
+      const el = document.createElement("span");
+      el.className = className;
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.animationDuration = (7 + Math.random() * 8) + "s";
+      el.style.animationDelay = (Math.random() * 5) + "s";
+      el.style.fontSize = (12 + Math.random() * 18) + "px";
+      container.appendChild(el);
+
+      setTimeout(() => el.remove(), 16000);
+    }
+
+    for (let i = 0; i < 22; i++) {
+      createFloatingElement(bgHearts, heartSymbols, "floating-heart");
+      createFloatingElement(bgFlowers, flowerSymbols, "floating-flower");
+    }
+
+    setInterval(() => {
+      createFloatingElement(bgHearts, heartSymbols, "floating-heart");
+    }, 900);
+
+    setInterval(() => {
+      createFloatingElement(bgFlowers, flowerSymbols, "floating-flower");
+    }, 1300);
+
+    // Typing effect
+    const welcomeTitle = document.getElementById("welcomeTitle");
+    let typingIndex = 0;
+
+    function typeWelcome() {
+      if (typingIndex < sambutanText.length) {
+        welcomeTitle.textContent += sambutanText.charAt(typingIndex);
+        typingIndex++;
+        setTimeout(typeWelcome, 65);
+      }
+    }
+    typeWelcome();
+
+    // =========================
+    // MULAI
+    // =========================
+    async function startWebsite() {
+      const music = document.getElementById("music");
+
+      // Putar musik dari klik pengguna agar lebih kompatibel dengan autoplay policy.
+      try {
+        music.volume = 0.7;
+        music.currentTime = 0;
+        await music.play();
+      } catch (e) {
+        console.log("Musik belum dapat diputar:", e);
+      }
+
+      // Masuk fullscreen
+      try {
+        if (document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen();
+        }
+      } catch (e) {
+        console.log("Fullscreen tidak tersedia/ditolak browser:", e);
+      }
+
+      document.getElementById("welcomePage").classList.remove("active");
+      setTimeout(() => {
+        document.getElementById("messagePage").classList.add("active");
+      }, 120);
+    }
+
+    // =========================
+    // WHATSAPP
+    // =========================
+    const messageInput = document.getElementById("messageInput");
+    const counter = document.getElementById("counter");
+
+    messageInput.addEventListener("input", () => {
+      counter.textContent = messageInput.value.length;
+    });
+
+    function sendWhatsApp() {
+      const message = messageInput.value.trim();
+
+      if (!message) {
+        messageInput.classList.remove("shake");
+        void messageInput.offsetWidth;
+        messageInput.classList.add("shake");
+        messageInput.focus();
+        return;
+      }
+
+      const url = "https://wa.me/" + nomorWA + "?text=" + encodeURIComponent(message);
+      window.location.href = url;
+    }
+
+    // =========================
+    // KONTROL MUSIK
+    // =========================
+    const musicBtn = document.getElementById("musicBtn");
+
+    function toggleMusic() {
+      const music = document.getElementById("music");
+
+      if (music.paused) {
+        music.play().then(() => {
+          musicBtn.textContent = "🔊 Musik";
+        }).catch(() => {});
+      } else {
+        music.pause();
+        musicBtn.textContent = "🔇 Musik";
+      }
+    }
+  </script>
+</body>
+</html>
