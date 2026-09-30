@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#12091c">
+<title>Sebuah Pesan Untukmu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="particles" id="particles"></div>
+
+<section class="page active" id="page1">
+  <div class="card">
+    <div class="heart">♥</div>
+    <div class="label">SEBUAH PESAN</div>
+    <h1>Awalnya, aku ingin mengatakan sesuatu kepadamu.</h1>
+    <p>Sebenarnya aku membuat ini karena ada sesuatu yang sudah cukup lama ingin aku sampaikan.</p>
+    <button onclick="nextPage(2)">Selanjutnya →</button>
+  </div>
+</section>
+
+<section class="page" id="page2">
+  <div class="card">
+    <div class="mini-heart">♡</div>
+    <div class="label">SESUATU YANG INGIN ADEK JUJURKAN</div>
+    <h2>adek sudah memikirkannya lagi.</h2>
+    <div class="story">
+      <p>Awalnya adek memang punya rasa suka sama kakak. Bahkan adek sempat berpikir untuk mengungkapkan perasaan.</p>
+      <p>Tapi semakin lama, rasa itu perlahan mulai memudar. Salah satu alasannya adalah emang adek cocok buat kakak?</p>
+      <p>Semakin adek menunggu dan memikirkannya, adek mulai sadar bahwa mungkin kita memang tidak cocok seperti yang awalnya adek bayangkan.</p>
+      <p>adek tidak ingin memaksakan sesuatu hanya karena sebelumnya adek sudah berniat untuk mengatakannya. Jadi kali ini adek memilih untuk jujur pada perasaan adek sendiri.</p>
+    </div>
+    <button onclick="nextPage(3)">Selanjutnya →</button>
+  </div>
+</section>
+
+<section class="page" id="page3">
+  <div class="card stopwatch-card">
+    <div class="hourglass">⌛</div>
+    <div class="label">SEBELUM BENAR-BENAR MEMUTUSKAN</div>
+    <h2>Aku ingin berpikir sekali lagi.</h2>
+    <p>Untuk sekarang biarkan waktu berjalan. Tidak ada batas waktu. Aku hanya ingin memberikan diriku sendiri waktu untuk benar-benar memikirkan semuanya.</p>
+    <div class="stopwatch" id="stopwatch">00:00:00</div>
+    <div class="status">waktu untuk berpikir</div>
+    <div class="note"><span>♥</span> Tidak perlu terburu-buru. <span>♥</span></div>
+  </div>
+</section>
+
+<script>
+let currentPage = 1;
+let stopwatchStarted = false;
+let startTime = 0;
+
+function nextPage(pageNumber) {
+  document.getElementById("page" + currentPage).classList.remove("active");
+  setTimeout(() => {
+    document.getElementById("page" + pageNumber).classList.add("active");
+    currentPage = pageNumber;
+    if (pageNumber === 3 && !stopwatchStarted) startStopwatch();
+  }, 100);
+}
+
+function startStopwatch() {
+  stopwatchStarted = true;
+  startTime = Date.now();
+  updateStopwatch();
+  setInterval(updateStopwatch, 250);
+}
+
+function updateStopwatch() {
+  const elapsed = Date.now() - startTime;
+  const totalSeconds = Math.floor(elapsed / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  document.getElementById("stopwatch").textContent =
+    String(hours).padStart(2, "0") + ":" +
+    String(minutes).padStart(2, "0") + ":" +
+    String(seconds).padStart(2, "0");
+}
+
+const particles = document.getElementById("particles");
+const symbols = ["♥", "♡", "✿", "❀"];
+
+function createParticle() {
+  const item = document.createElement("span");
+  item.className = "particle";
+  item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  item.style.left = Math.random() * 100 + "vw";
+  item.style.fontSize = (10 + Math.random() * 15) + "px";
+  item.style.animationDuration = (8 + Math.random() * 8) + "s";
+  item.style.opacity = 0.15 + Math.random() * 0.35;
+  particles.appendChild(item);
+  setTimeout(() => item.remove(), 17000);
+}
+
+for (let i = 0; i < 25; i++) setTimeout(createParticle, i * 300);
+setInterval(createParticle, 700);
+</script>
+</body>
+</html>

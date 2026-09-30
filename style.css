@@ -1,0 +1,27 @@
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%}
+body{min-height:100vh;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#fff;background:radial-gradient(circle at 15% 15%,rgba(255,95,170,.14),transparent 30%),radial-gradient(circle at 85% 85%,rgba(154,82,255,.15),transparent 30%),#12091c}
+.page{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transform:translateY(18px) scale(.98);transition:opacity .5s ease,transform .5s ease}
+.page.active{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+.card{width:min(100%,520px);max-height:92vh;overflow-y:auto;padding:34px 24px;text-align:center;border:1px solid rgba(255,255,255,.12);border-radius:28px;background:rgba(28,14,39,.84);backdrop-filter:blur(16px);box-shadow:0 25px 80px rgba(0,0,0,.45);scrollbar-width:none}
+.card::-webkit-scrollbar{display:none}
+.heart{width:82px;height:82px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:#ff72b4;background:rgba(255,91,166,.09);font-size:48px;text-shadow:0 0 25px rgba(255,91,166,.7);animation:pulse 1.8s ease-in-out infinite}
+.mini-heart,.hourglass{font-size:40px;margin-bottom:12px}
+.label{margin-bottom:14px;color:#ff9dcc;font-size:10px;font-weight:bold;letter-spacing:3px}
+h1{font-size:clamp(27px,7vw,40px);line-height:1.2;margin-bottom:20px}
+h2{font-size:26px;line-height:1.25;margin-bottom:18px}
+p{color:#d6c9dc;line-height:1.7;font-size:15px}
+.story{margin:8px 0 24px;text-align:left}
+.story p{margin-bottom:15px}
+button{width:100%;border:0;border-radius:999px;padding:15px 20px;color:white;background:linear-gradient(135deg,#ff4e99,#9659ff);font-size:15px;font-weight:bold;cursor:pointer;box-shadow:0 12px 32px rgba(201,73,164,.25)}
+button:active{transform:scale(.96)}
+.stopwatch-card{padding-top:40px}
+.stopwatch{margin:28px 0 10px;font-family:"Courier New",monospace;font-size:clamp(40px,13vw,72px);font-weight:bold;letter-spacing:2px;color:#ff9dcc;text-shadow:0 0 25px rgba(255,104,180,.35)}
+.status{color:#96899e;font-size:12px;letter-spacing:2px;text-transform:uppercase}
+.note{margin-top:35px;padding:13px;border-radius:16px;color:#9f92a5;background:rgba(255,255,255,.035);font-size:12px}
+.note span{color:#ff72b4;margin:0 5px}
+.particles{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.particle{position:absolute;top:110%;color:#ff82ba;animation:floatUp linear forwards}
+@keyframes floatUp{from{transform:translateY(0) rotate(0deg)}to{transform:translateY(-125vh) rotate(360deg)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+@media (min-width:601px){body:before{content:"Website ini dibuat untuk dibuka melalui HP 📱";position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:30px;background:#12091c;color:white;text-align:center;font-size:18px}.page,.particles{display:none}}
